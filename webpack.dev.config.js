@@ -3,17 +3,20 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: {
+        'hello-world': './src/hello-world.js',
+        'ned-image': './src/ned.js',
+    },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
         path: path.resolve(__dirname, './dist'),
         publicPath: ''
     },
     mode: 'development',
     devServer: {
         contentBase: path.resolve(__dirname, './dist'),
-        index: 'index.html',
-        port: 9000
+        index: 'hello-world.html', // formerly index.html (for single page)
+        port: 9044
     },
     module: {
         rules: [
@@ -56,9 +59,18 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
+            filename: 'hello-world.html',
+            chunks: ['hello-world'], //can create multiple
             title: 'Hello world',
-            template: 'src/index.hbs',
-            description: 'some description'
+            template: 'src/page-template.hbs',
+            description: 'Hello World'
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'ned-image.html',
+            chunks: ['ned-image'], //matches entry point properties
+            title: 'Ned Image',
+            template: 'src/page-template.hbs',
+            description: 'Ned Image'
         })
     ]
 };
